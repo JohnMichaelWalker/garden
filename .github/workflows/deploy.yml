@@ -12,6 +12,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: garden-service
 
     steps:
       - name: Checkout
@@ -34,9 +37,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build image
-        run: |
-          docker build -t $IMAGE_NAME:$TAG .
-          docker tag  $IMAGE_NAME:$TAG $IMAGE_NAME:latest
+        run: docker build -t $IMAGE_NAME:$TAG -t $IMAGE_NAME:latest .
 
       - name: Push image
         run: |
