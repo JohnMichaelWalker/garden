@@ -40,6 +40,4 @@ jobs:
         run: docker build -t $IMAGE_NAME:$TAG -t $IMAGE_NAME:latest .
 
       - name: Push image
-        run: |
-          docker push $IMAGE_NAME:$TAG
-          docker push $IMAGE_NAME:latest
+        run: docker push --all-tags $IMAGE_NAME
