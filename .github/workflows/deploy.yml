@@ -10,11 +10,8 @@ env:
   TAG: ${{ github.sha }}
 
 jobs:
-  build:
+  mavenbuild:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: garden-service
 
     steps:
       - name: Checkout
@@ -43,6 +40,7 @@ jobs:
 #        run: docker push --all-tags $IMAGE_NAME
   dockerbuildandpush:
     runs-on: ubuntu-latest
+    needs: mavenbuild
     strategy:
       matrix:
         module: [ petunia-service, garden-service ]
