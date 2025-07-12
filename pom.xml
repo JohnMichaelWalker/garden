@@ -13,15 +13,18 @@
 		<module>garden-service</module>
 		<module>garden-api</module>
 		<module>petunia-service</module>
+		<module>petunia-client</module>
+		<module>petunia-api</module>
 	</modules>
 
 	<properties>
 		<java.version>24</java.version>
 	</properties>
 
-	<!-- Need this as spring boot modules not inheriting spring boot parent -->
+
 	<dependencyManagement>
 		<dependencies>
+			<!-- Need this as spring boot modules not inheriting spring boot parent -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
@@ -29,6 +32,8 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+
 		</dependencies>
 	</dependencyManagement>
 

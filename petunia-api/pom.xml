@@ -10,5 +10,19 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>garden-api</artifactId>
+    <artifactId>petunia-api</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.johnwalkers.garden</groupId>
+            <artifactId>garden-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+    </dependencies>
 </project>
