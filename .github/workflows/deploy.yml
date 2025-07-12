@@ -23,6 +23,27 @@ jobs:
       - name: Maven Package
         run: mvn -B package
 
+      - name: Log in to Dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker build and push all services
+        env:
+          TAG: ${{ github.sha }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: |
+          for service in petunia-service garden-service; do
+            echo "Processing $service"
+            IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/$service
+            cd "$service"
+            docker build -t $IMAGE_NAME:$TAG -t $IMAGE_NAME:latest .
+            docker push "$IMAGE_NAME:$TAG"
+            docker push "$IMAGE_NAME:latest"
+          done
+
+
   dockerbuildandpush:
     runs-on: ubuntu-latest
     needs: mavenbuild
@@ -33,9 +54,6 @@ jobs:
       IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.module }}
       TAG: ${{ github.sha }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Log in to Dockerhub
         uses: docker/login-action@v3
         with:
