@@ -5,10 +5,6 @@ on:
     branches: [main]
   workflow_dispatch:
 
-env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/garden-service
-  TAG: ${{ github.sha }}
-
 jobs:
   mavenbuild:
     runs-on: ubuntu-latest
@@ -41,9 +37,24 @@ jobs:
   dockerbuildandpush:
     runs-on: ubuntu-latest
     needs: mavenbuild
+    env:
+      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.module }}
+      TAG: ${{ github.sha }}
     strategy:
       matrix:
         module: [ petunia-service, garden-service ]
     steps:
-      - name: Print module name
-        run: echo "Building module ${{ matrix.module }}"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to Dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image
+        run: docker build -t $IMAGE_NAME:$TAG -t $IMAGE_NAME:latest .
+
+      - name: Push image
+        run: docker push --all-tags $IMAGE_NAME
