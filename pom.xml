@@ -10,11 +10,13 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>garden-service</module>
-		<module>garden-api</module>
-		<module>petunia-service</module>
-		<module>petunia-client</module>
-		<module>petunia-api</module>
+		<module>garden/garden-service</module>
+		<module>garden/garden-api</module>
+		<module>petunia/petunia-service</module>
+		<module>petunia/petunia-client</module>
+		<module>petunia/petunia-api</module>
+		<module>orderbook/orderbook</module>
+		<module>orderbook/orderbook-api</module>
 	</modules>
 
 	<properties>
@@ -32,8 +34,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
-
 		</dependencies>
 	</dependencyManagement>
 

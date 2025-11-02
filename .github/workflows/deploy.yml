@@ -8,6 +8,15 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - service: garden-service
+            path: garden/garden-service
+          - service: petunia-service
+            path: petunia/petunia-service
+          - service: orderbook
+            path: orderbook/orderbook
 
     steps:
       - name: Checkout
@@ -37,12 +46,21 @@ jobs:
           TAG: ${{ github.sha }}
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
-          for service in petunia-service garden-service; do
-            echo "Processing $service"
-            IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/$service
-            cd "$service"
+          SERVICES=(
+            "garden-service:garden/garden-service"
+            "petunia-service:petunia/petunia-service"
+            "orderbook:orderbook/orderbook"
+          )
+          
+          for entry in "${SERVICES[@]}"; do
+            IFS=: read -r service path <<< "$entry"
+            echo "Processing $service at $path"
+            
+            IMAGE_NAME="${DOCKERHUB_USERNAME}/${service}"
+          
             docker buildx build --platform linux/amd64,linux/arm64 \
-              -t $IMAGE_NAME:$TAG -t $IMAGE_NAME:latest \
-              --push .
-            cd ..
+              --push \
+              -t "${IMAGE_NAME}:${TAG}" \
+              -t "${IMAGE_NAME}:latest" \
+              "${path}"
           done
