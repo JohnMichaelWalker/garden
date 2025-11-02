@@ -8,15 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - service: garden-service
-            path: garden/garden-service
-          - service: petunia-service
-            path: petunia/petunia-service
-          - service: orderbook
-            path: orderbook/orderbook
 
     steps:
       - name: Checkout
